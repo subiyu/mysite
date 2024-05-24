@@ -2,7 +2,11 @@ package com.poscodx.mysite.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import com.poscodx.mysite.vo.UserVo;
 
 public class UserDao {
 	private Connection getConnection() throws SQLException {
@@ -17,6 +21,30 @@ public class UserDao {
 		}
 		
 		return conn;
+	}
+
+	public int insert(UserVo vo) {
+		int result = 0;
+		
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt1 = conn.prepareStatement("INSERT INTO user VALUES(null, ?, ?, password(?), ?, current_date());");
+			PreparedStatement pstmt2 = conn.prepareStatement("SELECT last_insert_id() FROM dual");
+		) {
+			pstmt1.setString(1, vo.getName());
+			pstmt1.setString(2, vo.getEmail());
+			pstmt1.setString(3, vo.getPassword());
+			pstmt1.setString(4, vo.getGender());
+			result = pstmt1.executeUpdate();
+			
+			ResultSet rs = pstmt2.executeQuery();
+			vo.setNo(rs.next() ? rs.getLong(1) : null);
+			rs.close();
+		} catch(SQLException e) {
+			System.out.println("error: " + e);
+		} 
+		
+		return result;
 	}
 	
 	
