@@ -32,7 +32,6 @@ public class UserServlet extends HttpServlet {
 			vo.setPassword(password);
 			vo.setGender(gender);
 			
-			System.out.println(vo);
 			new UserDao().insert(vo);
 			response.sendRedirect(request.getContextPath() + "/user?a=joinsuccess");
 			
