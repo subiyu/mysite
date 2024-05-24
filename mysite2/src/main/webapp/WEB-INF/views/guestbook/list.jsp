@@ -12,7 +12,7 @@
 <link href="<%=request.getContextPath() %>/assets/css/guestbook.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-	<form action="<%=request.getContextPath() %>/guestbook?a=add" method="post">
+	<form action="<%=request.getContextPath() %>/guestbook" method="post">
 		<div id="container">
 			<jsp:include page="/WEB-INF/views/includes/header.jsp" />
 			<div id="content">

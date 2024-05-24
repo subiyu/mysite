@@ -25,7 +25,7 @@ public class GuestbookServlet extends HttpServlet {
 			String no = request.getParameter("no");
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/guestbook/deleteform.jsp");
 			rd.forward(request, response);
-		} else if("add".equals(action)) {
+		} else if("insert".equals(action)) {
 			request.setCharacterEncoding("utf-8");
 
 			String name = request.getParameter("name");
@@ -49,7 +49,7 @@ public class GuestbookServlet extends HttpServlet {
 			
 			response.sendRedirect(request.getContextPath() + "/guestbook");
 		} else {
-			/* default action (list) */
+			/* default 4action (list) */
 			List<GuestBookVo> list = new GuestBookDao().findAll();
 			request.setAttribute("list", list);
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/guestbook/list.jsp");
