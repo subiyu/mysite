@@ -9,6 +9,7 @@
   </modules>
   
   <build>
+	<finalName>mysite2</finalName>
 	<plugins>
 		<plugin>
 			<!-- /manger와 통신해서 war 파일 배포 -->
