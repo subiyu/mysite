@@ -53,7 +53,7 @@ public class GuestBookDao {
 		
 		try (
 			Connection conn = getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("SELECT no, name, password, contents, date_format(reg_date, '%Y/%m/%d %H:%i:%s') FROM guestbook");
+			PreparedStatement pstmt = conn.prepareStatement("SELECT no, name, password, contents, date_format(reg_date, '%Y/%m/%d %H:%i:%s') FROM guestbook ORDER BY reg_date desc");
 			ResultSet rs = pstmt.executeQuery();
 		) {
 			while(rs.next()) {
