@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.poscodx.mysite.dao.UserDao;
 import com.poscodx.mysite.vo.UserVo;
 
-public class UserServlet extends HttpServlet {
+public class UserServlet extends ActionServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	/* protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		String action = request.getParameter("a");
 		
@@ -46,6 +46,6 @@ public class UserServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
-	}
+	} */
 
 }
