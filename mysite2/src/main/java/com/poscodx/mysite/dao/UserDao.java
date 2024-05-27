@@ -46,6 +46,32 @@ public class UserDao {
 		
 		return result;
 	}
+
+	public UserVo findByNoAndPassword(String email, String password) {
+		UserVo result = null;		//test code(testOrder())에서 assertNull 검사를 하므로, 매칭되는 값이 없으면 null을 반환해야한다.
+		
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("SELECT no, name FROM user WHERE email = ? and password = ?");
+		) {
+			pstmt.setString(1, email);
+			pstmt.setString(2, password);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = new UserVo();		 // 매칭되는 값이 존재하면 객체 생성
+				Long no = rs.getLong(1);
+				String name = rs.getString(2);
+				result.setNo(no);
+				result.setName(name);
+			}
+			rs.close();
+		} catch(SQLException e) {
+			System.out.println("error: " + e);
+		} 
+		
+		return result;
+	}
 	
 	
 }
