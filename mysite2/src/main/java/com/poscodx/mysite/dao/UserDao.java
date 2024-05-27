@@ -52,7 +52,7 @@ public class UserDao {
 		
 		try (
 			Connection conn = getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("SELECT no, name FROM user WHERE email = ? and password = ?");
+			PreparedStatement pstmt = conn.prepareStatement("SELECT no, name FROM user WHERE email = ? and password = password(?)");
 		) {
 			pstmt.setString(1, email);
 			pstmt.setString(2, password);
