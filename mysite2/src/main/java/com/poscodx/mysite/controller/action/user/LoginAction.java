@@ -19,7 +19,6 @@ public class LoginAction implements Action {
 		String password = request.getParameter("password");
 		
 		UserVo authUser = new UserDao().findByNoAndPassword(email, password);
-		System.out.println(authUser);
 		if(authUser == null) {
 			request.setAttribute("email", email);
 			request.setAttribute("result", "fail");
@@ -34,6 +33,7 @@ public class LoginAction implements Action {
 		HttpSession session = request.getSession(true);
 		session.setAttribute("authUser", authUser);
 		
+		// redirect to main
 		response.sendRedirect(request.getContextPath());
 	}
 

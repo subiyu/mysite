@@ -72,6 +72,67 @@ public class UserDao {
 		
 		return result;
 	}
+
+	public UserVo findByNo(Long no) {
+		UserVo result = null;
+		
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("SELECT no, name, email, gender FROM user WHERE no = ?");
+		) {
+			pstmt.setLong(1, no);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = new UserVo();		 // 매칭되는 값이 존재하면 객체 생성
+				no = rs.getLong(1);
+				String name = rs.getString(2);
+				String email = rs.getString(3);
+				String gender = rs.getString(4);
+				result.setNo(no);
+				result.setName(name);
+				result.setEmail(email);
+				result.setGender(gender);
+			}
+			rs.close();
+		} catch(SQLException e) {
+			System.out.println("error: " + e);
+		} 
+		
+		return result;
+	}
+
+	public int update(UserVo vo) {
+		int result = 0;
+		ResultSet rs = null;
+		
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt1 = conn.prepareStatement("UPDATE user SET name=?, gender=? WHERE no=?");
+			PreparedStatement pstmt2 = conn.prepareStatement("UPDATE user SET name=?, password=password(?), gender=? WHERE no=?");
+		) {
+			if("".equals(vo.getPassword())) {
+				pstmt1.setString(1, vo.getName());
+				pstmt1.setString(2, vo.getGender());
+				pstmt1.setLong(3, vo.getNo());
+				result = pstmt1.executeUpdate();
+				rs = pstmt1.executeQuery();
+			} else {
+				pstmt2.setString(1, vo.getName());
+				pstmt2.setString(2, vo.getPassword());
+				pstmt2.setString(3, vo.getGender());
+				pstmt2.setLong(4, vo.getNo());
+				result = pstmt2.executeUpdate();
+				rs = pstmt2.executeQuery();
+			}
+			
+			rs.close();
+		} catch(SQLException e) {
+			System.out.println("error: " + e);
+		} 
+		
+		return result;
+	}
 	
 	
 }

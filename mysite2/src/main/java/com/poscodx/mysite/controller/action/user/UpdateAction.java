@@ -5,29 +5,45 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.poscodx.mysite.controller.ActionServlet.Action;
 import com.poscodx.mysite.dao.UserDao;
 import com.poscodx.mysite.vo.UserVo;
 
-public class JoinAction implements Action {
+public class UpdateAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		
+		// Access Control
+		if(session == null) {
+			response.sendRedirect(request.getContextPath());
+			return;
+		}
+		
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(authUser == null) {
+			response.sendRedirect(request.getContextPath());
+			return;
+		}
+		
+		Long no = Long.parseLong(request.getParameter("no"));
 		String name = request.getParameter("name");
-		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		String gender = request.getParameter("gender");
 		
-		UserVo vo = new UserVo();
+		UserVo vo = new UserVo();		
+		vo.setNo(no);
 		vo.setName(name);
-		vo.setEmail(email);
 		vo.setPassword(password);
 		vo.setGender(gender);
-
-		new UserDao().insert(vo);
 		
-		response.sendRedirect(request.getContextPath()+"/user?a=joinsuccess");
+		new UserDao().update(vo);
+		authUser.setName(name);
+
+		response.sendRedirect(request.getContextPath());
 	}
 
 }
