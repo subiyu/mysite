@@ -1,9 +1,8 @@
-<%@page import="com.poscodx.mysite.vo.GuestBookVo"%>
-<%@page import="java.util.List"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-	List<GuestBookVo> list = (List<GuestBookVo>)request.getAttribute("list");
-%>
+<% pageContext.setAttribute("newline", "\n"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,31 +35,29 @@
 					</table>
 				</form>
 
-				<%
-						for(GuestBookVo vo : list) {
-					%>
-
+				<c:set var="count" value="${fn:length(list) }" />
+				<c:forEach items='${list }' var='vo' varStatus="status">
+		
 				<ul>
 					<li>
 						<table>
 							<tr>
-								<td>[<%=vo.getNo() %>]
-								</td>
-								<td><%=vo.getName() %></td>
-								<td><%=vo.getRegDate() %></td>
+								<td>[${vo.no }]</td>
+								<td>${vo.name }</td>
+								<td>${vo.regDate }</td>
 								<td><a
-									href="${pageContext.request.contextPath}/guestbook?a=deleteform&no=<%=vo.getNo() %>">삭제</a></td>
+									href="${pageContext.request.contextPath}/guestbook?a=deleteform&no=${vo.no }">삭제</a></td>
 							</tr>
 							<tr>
-								<td colspan=4><%=vo.getContents().replaceAll(">", "&gt;").replaceAll("<", "&lt;").replaceAll("\n", "<br>") %></td>
+								<td colspan=4>
+									${fn:replace(fn:replace(fn:replace(vo.contents, ">", "&gt;"), "<", "&lt;"), newline, "<br>") }
+								</td>
 							</tr>
-						</table> <br>
+						</table> 
+						<br>
 					</li>
 				</ul>
-
-				<%
-						}
-					%>
+				</c:forEach>
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/includes/navigation.jsp" />

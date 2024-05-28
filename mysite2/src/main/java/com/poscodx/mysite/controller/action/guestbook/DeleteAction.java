@@ -16,6 +16,7 @@ public class DeleteAction implements Action {
 		request.setCharacterEncoding("utf-8");
 
 		String no = request.getParameter("no");
+		System.out.println("넘버" + no);
 		String password = request.getParameter("password");
 		
 		new GuestBookDao().deleteByNo(Long.parseLong(no), password);

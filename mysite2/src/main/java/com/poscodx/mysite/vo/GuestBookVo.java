@@ -1,9 +1,5 @@
 package com.poscodx.mysite.vo;
 
-import java.time.LocalDateTime;
-
-import javax.print.attribute.standard.DateTimeAtCompleted;
-
 public class GuestBookVo {
 	private Long no;
 	private String name;
