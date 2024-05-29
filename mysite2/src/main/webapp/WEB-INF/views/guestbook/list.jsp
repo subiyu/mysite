@@ -16,8 +16,7 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="guestbook">
-				<form action="${pageContext.request.contextPath}/guestbook"
-					method="post">
+				<form action="${pageContext.request.contextPath}/guestbook" method="post">
 					<input type="hidden" name="a" value="insert">
 					<table>
 						<tr>
@@ -38,25 +37,25 @@
 				<c:set var="count" value="${fn:length(list) }" />
 				<c:forEach items='${list }' var='vo' varStatus="status">
 		
-				<ul>
-					<li>
-						<table>
-							<tr>
-								<td>[${vo.no }]</td>
-								<td>${vo.name }</td>
-								<td>${vo.regDate }</td>
-								<td><a
-									href="${pageContext.request.contextPath}/guestbook?a=deleteform&no=${vo.no }">삭제</a></td>
-							</tr>
-							<tr>
-								<td colspan=4>
-									${fn:replace(fn:replace(fn:replace(vo.contents, ">", "&gt;"), "<", "&lt;"), newline, "<br>") }
-								</td>
-							</tr>
-						</table> 
-						<br>
-					</li>
-				</ul>
+					<ul>
+						<li>
+							<table>
+								<tr>
+									<td>[${vo.no }]</td>
+									<td>${vo.name }</td>
+									<td>${vo.regDate }</td>
+									<td><a
+										href="${pageContext.request.contextPath}/guestbook?a=deleteform&no=${vo.no }">삭제</a></td>
+								</tr>
+								<tr>
+									<td colspan=4>
+										${fn:replace(fn:replace(fn:replace(vo.contents, ">", "&gt;"), "<", "&lt;"), newline, "<br>") }
+									</td>
+								</tr>
+							</table> 
+							<br>
+						</li>
+					</ul>
 				</c:forEach>
 			</div>
 		</div>
