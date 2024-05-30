@@ -1,4 +1,4 @@
-package com.poscodx.mysite.controller.action.user;
+package com.poscodx.mysite.controller.action.board;
 
 import java.io.IOException;
 
@@ -8,11 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.poscodx.mysite.controller.ActionServlet.Action;
-import com.poscodx.mysite.dao.UserDao;
+import com.poscodx.mysite.dao.BoardDao;
 import com.poscodx.mysite.vo.UserVo;
 
-public class UpdateFormAction implements Action {
-
+public class DeleteAction implements Action {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
@@ -29,11 +28,17 @@ public class UpdateFormAction implements Action {
 			return;
 		}
 		
-		UserVo userVo = new UserDao().findByNo(authUser.getNo());
-		request.setAttribute("userVo", userVo);
-		request
-			.getRequestDispatcher("/WEB-INF/views/user/updateform.jsp")
-			.forward(request, response);
+		Long userNo = authUser.getNo();
+		
+		Long articleNo = Long.parseLong(request.getParameter("no"));
+		Long writerNo = Long.parseLong(request.getParameter("writer"));
+		
+		if(userNo == writerNo) {
+			new BoardDao().deleteByNo(articleNo);
+		}
+		//TODO: else 도 구현하기
+		
+		response.sendRedirect(request.getContextPath() + "/board");
 	}
 
 }

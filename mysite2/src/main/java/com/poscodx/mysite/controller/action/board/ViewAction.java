@@ -1,4 +1,4 @@
-package com.poscodx.mysite.controller.action.guestbook;
+package com.poscodx.mysite.controller.action.board;
 
 import java.io.IOException;
 
@@ -7,20 +7,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.poscodx.mysite.controller.ActionServlet.Action;
-import com.poscodx.mysite.dao.GuestBookDao;
+import com.poscodx.mysite.dao.BoardDao;
+import com.poscodx.mysite.vo.BoardVo;
 
-public class DeleteAction implements Action {
+public class ViewAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-
 		String no = request.getParameter("no");
-		String password = request.getParameter("password");
+		BoardVo board = new BoardDao().findByNo(Long.parseLong(no));
 		
-		new GuestBookDao().deleteByNo(Long.parseLong(no), password);
-		
-		response.sendRedirect(request.getContextPath() + "/guestbook");
+		request.setAttribute("boardVo", board);
+		request
+			.getRequestDispatcher("/board/view.jsp")
+			.forward(request, response);
 	}
 
 }
