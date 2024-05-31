@@ -12,10 +12,11 @@ import com.poscodx.mysite.dao.BoardDao;
 import com.poscodx.mysite.vo.BoardVo;
 import com.poscodx.mysite.vo.UserVo;
 
-public class WriteAction implements Action {
+public class ReplyAction implements Action {
+
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("여기는 write");
+		System.out.println("여기는 reply");
 		HttpSession session = request.getSession();
 		
 		if(session == null) {
@@ -30,15 +31,27 @@ public class WriteAction implements Action {
 		}
 		
 		Long userNo = authUser.getNo();
+		Long gNo = Long.parseLong(request.getParameter("gNo"));
+		Long oNo = Long.parseLong(request.getParameter("oNo"));
+		Integer depth = Integer.parseInt(request.getParameter("depth"));
 		String title = request.getParameter("title");
 		String contents = request.getParameter("contents");
+		
+		oNo += 1; 	// 부모글 order_no + 1
+		depth += 1;
+		new BoardDao().updateBeforeInsert(gNo, oNo);
 		
 		BoardVo vo = new BoardVo();
 		vo.setTitle(title);
 		vo.setContents(contents);
+		vo.setgNo(gNo);
+		vo.setoNo(oNo);
+		vo.setDepth(depth);
 		vo.setUserNo(userNo);
 		
-		new BoardDao().insert(vo);
+		
+		new BoardDao().insertReply(vo);
 		response.sendRedirect(request.getContextPath() + "/board");
 	}
+
 }

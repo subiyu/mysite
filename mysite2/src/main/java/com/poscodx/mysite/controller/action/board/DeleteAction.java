@@ -30,11 +30,11 @@ public class DeleteAction implements Action {
 		
 		Long userNo = authUser.getNo();
 		
-		Long articleNo = Long.parseLong(request.getParameter("no"));
+		Long boardNo = Long.parseLong(request.getParameter("no"));
 		Long writerNo = Long.parseLong(request.getParameter("writer"));
 		
 		if(userNo == writerNo) {
-			new BoardDao().deleteByNo(articleNo);
+			new BoardDao().deleteByNo(boardNo);
 		}
 		//TODO: else 도 구현하기
 		

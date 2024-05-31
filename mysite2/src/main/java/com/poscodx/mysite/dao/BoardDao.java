@@ -19,6 +19,7 @@ public class BoardDao {
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");			
 			String url = "jdbc:mariadb://192.168.0.193:3306/webdb?charset=utf8";
+			//String url = "jdbc:mariadb://192.168.35.55:3306/webdb?charset=utf8";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 		} catch(ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패: " + e);
@@ -32,17 +33,46 @@ public class BoardDao {
 		
 		try (
 			Connection conn = getConnection();
-			PreparedStatement pstmt1 = conn.prepareStatement("INSERT INTO board(title, contents, hit, reg_date, g_no, o_no, depth, user_no) VALUES(?, ?, ?, now(), ?, ?, ?, ?)");
+			PreparedStatement pstmt1 = conn.prepareStatement("SELECT MAX(g_no) FROM board");
+			PreparedStatement pstmt2 = conn.prepareStatement("INSERT INTO board(title, contents, hit, reg_date, g_no, o_no, depth, user_no) VALUES(?, ?, 0, now(), ?, 1, 0, ?)");
+			PreparedStatement pstmt3 = conn.prepareStatement("SELECT last_insert_id() FROM dual");
+		) {
+			ResultSet rs = pstmt1.executeQuery();
+			int maxGno = 0;
+			if (rs.next()) {
+			    maxGno = rs.getInt(1);
+			}
+			pstmt2.setString(1, vo.getTitle());
+			pstmt2.setString(2, vo.getContents());
+			pstmt2.setLong(3, maxGno+1);
+			pstmt2.setLong(4, vo.getUserNo());
+			
+			result = pstmt2.executeUpdate();
+			
+			rs = pstmt3.executeQuery();
+			vo.setNo(rs.next() ? rs.getLong(1) : null);
+			rs.close();
+		} catch(SQLException e) {
+			System.out.println("error: " + e);
+		} 
+		
+		return result;
+	}
+	
+	public int insertReply(BoardVo vo) {
+		int result = 0;
+		
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt1 = conn.prepareStatement("INSERT INTO board(title, contents, hit, reg_date, g_no, o_no, depth, user_no) VALUES(?, ?, 0, now(), ?, ?, ?, ?)");
 			PreparedStatement pstmt2 = conn.prepareStatement("SELECT last_insert_id() FROM dual");
 		) {
 			pstmt1.setString(1, vo.getTitle());
 			pstmt1.setString(2, vo.getContents());
-			pstmt1.setInt(3, vo.getHit());
-			pstmt1.setString(4, vo.getRegDate());
-			pstmt1.setLong(5, vo.getgNo());
-			pstmt1.setLong(6, vo.getoNo());
-			pstmt1.setInt(7, vo.getDepth());
-			pstmt1.setLong(8, vo.getUserNo());
+			pstmt1.setLong(3, vo.getgNo());
+			pstmt1.setLong(4, vo.getoNo());
+			pstmt1.setInt(5, vo.getDepth());
+			pstmt1.setLong(6, vo.getUserNo());
 			result = pstmt1.executeUpdate();
 			
 			ResultSet rs = pstmt2.executeQuery();
@@ -117,7 +147,7 @@ public class BoardDao {
 		
 		try (
 			Connection conn = getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("no, title, contents, hit, reg_date, g_no, o_no, depth, user_no FROM board WHERE no=?");
+			PreparedStatement pstmt = conn.prepareStatement("SELECT no, title, contents, hit, reg_date, g_no, o_no, depth, user_no FROM board WHERE no=?");
 		) {
 			pstmt.setLong(1, no);
 			ResultSet rs = pstmt.executeQuery();
@@ -143,6 +173,50 @@ public class BoardDao {
 				result.setDepth(depth);
 				result.setUserNo(userNo);
 			}
+			rs.close();
+		} catch(SQLException e) {
+			System.out.println("error: " + e);
+		} 
+		
+		return result;
+	}
+
+	public int update(Long no, String title, String contents) {
+		int result = 0;
+		ResultSet rs = null;
+		
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("UPDATE board SET title=?, contents=? WHERE no=?");
+		) {
+			pstmt.setString(1, title);
+			pstmt.setString(2, contents);
+			pstmt.setLong(3, no);
+			result = pstmt.executeUpdate();
+			rs = pstmt.executeQuery();
+			
+			rs.close();
+		} catch(SQLException e) {
+			System.out.println("error: " + e);
+		} 
+		
+		return result;
+	}
+	
+	public int updateBeforeInsert(Long gNo, Long oNo) {
+		int result = 0;
+		ResultSet rs = null;
+		
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("UPDATE board SET o_no = o_no + 1 "
+															+ "where g_no = ? and o_no >= ?");
+		) {
+			pstmt.setLong(1, gNo);
+			pstmt.setLong(2, oNo);
+			result = pstmt.executeUpdate();
+			rs = pstmt.executeQuery();
+			
 			rs.close();
 		} catch(SQLException e) {
 			System.out.println("error: " + e);
