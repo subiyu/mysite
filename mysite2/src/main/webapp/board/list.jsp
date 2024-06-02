@@ -15,7 +15,7 @@
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="${pageContext.request.contextPath}/board" method="post">
-					<input type="hidden" name="a" value="search_article">
+					<input type="hidden" name="a" value="search_board">
 					<input type="text" id="kwd" name="kwd">
 					<input type="submit" value="찾기">
 				</form>
@@ -33,10 +33,13 @@
 					<c:forEach items='${list }' var='vo' varStatus="status">
 						<tr>
 							<td>${vo.no }</td>	
-							<td style="text-align:left; padding-left:${20*0 }px">
+							<td style="text-align:left; padding-left:${20*vo.depth }px">
+							<c:if test='${vo.depth > 0 }'>
+								<img src='${pageContext.servletContext.contextPath }/assets/images/reply.png'>
+							</c:if>
 								<a href="${pageContext.request.contextPath}/board?a=view&no=${vo.no }">${vo.title }</a>
 							</td>
-							<td>${vo.userNo }</td>
+							<td>${vo.userName }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
 							<td><a href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no }&writer=${vo.userNo }" class="del">삭제</a></td>
@@ -44,19 +47,34 @@
 					</c:forEach>
 				</table>
 				
-				<!-- pager 추가 -->
+				<%-- 페이지 수 계산(JSTL에서 ceil 함수를 지원하지 않음 -> 계산식 사용) --%>
+				<c:set var="totalPages" value="${(size/bPP)+(1-((size/bPP)%1))%1}" />
+				
+				<%-- 페이지네이션 출력 --%>
 				<div class="pager">
 					<ul>
 						<li><a href="">◀</a></li>
-						<li><a href="">1</a></li>
-						<li class="selected">2</li>
-						<li><a href="">3</a></li>
-						<li>4</li>
-						<li>5</li>
+						<c:forEach begin="1" end="${bPP }" step="1" var="i">
+							<c:choose>
+						        <c:when test="${i <= totalPages }">
+						            <c:if test="${i < pageNo}">
+						                <li><a href="${pageContext.servletContext.contextPath}/board?page=${i}">${i}</a></li>
+						            </c:if>
+						            <c:if test="${i == pageNo}">
+						                <li class="selected">${i}</li>
+						            </c:if>
+						            <c:if test="${i > pageNo}">
+						                <li><a href="${pageContext.servletContext.contextPath}/board?page=${i}">${i}</a></li>
+						            </c:if>
+						        </c:when>
+						        <c:otherwise>
+						            <li>${i}</li>
+						        </c:otherwise>
+						    </c:choose>							
+						</c:forEach>
 						<li><a href="">▶</a></li>
 					</ul>
 				</div>					
-				<!-- pager 추가 -->
 				
 				<div class="bottom">
 					<a href="${pageContext.servletContext.contextPath }/board?a=write_form&g_no=-1&o_no=-1&depth=-1" id="new-book">글쓰기</a>

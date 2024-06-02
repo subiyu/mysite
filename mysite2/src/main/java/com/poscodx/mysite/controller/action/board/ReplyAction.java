@@ -16,7 +16,6 @@ public class ReplyAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("여기는 reply");
 		HttpSession session = request.getSession();
 		
 		if(session == null) {

@@ -18,8 +18,9 @@ public class BoardDao {
 		
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");			
-			String url = "jdbc:mariadb://192.168.0.193:3306/webdb?charset=utf8";
+			//String url = "jdbc:mariadb://192.168.0.193:3306/webdb?charset=utf8";
 			//String url = "jdbc:mariadb://192.168.35.55:3306/webdb?charset=utf8";
+			String url = "jdbc:mariadb://172.20.10.11:3306/webdb?charset=utf8";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 		} catch(ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패: " + e);
@@ -84,9 +85,8 @@ public class BoardDao {
 		
 		return result;
 	}
-
+	
 	public List<BoardVo> findAll() {
-		// TODO 페이징 해야하므로 limit 추가바람
 		List<BoardVo> result = new ArrayList<>();
 		
 		try (
@@ -116,6 +116,105 @@ public class BoardDao {
 				vo.setoNo(oNo);
 				vo.setDepth(depth);
 				vo.setUserNo(userNo);
+				
+				result.add(vo);
+			}
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		} 
+		
+		return result;
+	}
+
+	public List<BoardVo> findBoardList(int currentPage, int boardsPerPage) {
+		List<BoardVo> result = new ArrayList<>();
+		int offset = (currentPage - 1) * boardsPerPage; // 페이지 오프셋 계산
+		
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("SELECT a.no, a.title, a.contents, a.hit, a.reg_date, a.g_no, a.o_no, a.depth, a.user_no, b.name "
+															+ "FROM board a, user b "
+															+ "WHERE a.user_no = b.no "
+															+ "ORDER BY g_no desc, o_no asc "
+															+ "LIMIT ? OFFSET ?");
+		) {
+			pstmt.setInt(1, boardsPerPage);
+			pstmt.setInt(2, offset);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Long no = rs.getLong(1);
+				String title = rs.getString(2);
+				String contents = rs.getString(3);
+				Integer hit = rs.getInt(4);
+				String regDate = rs.getString(5);
+				Long gNo = rs.getLong(6);
+				Long oNo = rs.getLong(7);
+				Integer depth = rs.getInt(8);
+				Long userNo = rs.getLong(9);
+				String userName = rs.getString(10);
+
+				BoardVo vo = new BoardVo();
+				vo.setNo(no);
+				vo.setTitle(title);
+				vo.setContents(contents);
+				vo.setHit(hit);
+				vo.setRegDate(regDate);
+				vo.setgNo(gNo);
+				vo.setoNo(oNo);
+				vo.setDepth(depth);
+				vo.setUserNo(userNo);
+				vo.setUserName(userName);
+				
+				result.add(vo);
+			}
+		} catch (SQLException e) {
+			System.out.println("error: " + e);
+		} 
+		
+		return result;
+	}
+	
+	//title, content 대상으로 검색
+	public List<BoardVo> findByKeyword(String keyword) {
+		List<BoardVo> result = new ArrayList<>();
+		
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("SELECT a.no, a.title, a.contents, a.hit, a.reg_date, a.g_no, a.o_no, a.depth, a.user_no, b.name "
+															+ "FROM board a, user b "
+															+ "WHERE a.user_no = b.no "
+															+ "and a.title LIKE ? "
+															+ "or a.contents LIKE ? "
+															+ "ORDER BY g_no desc, o_no asc");
+		) {
+			pstmt.setString(1, "%" + keyword + "%");
+			pstmt.setString(2, "%" + keyword + "%");
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Long no = rs.getLong(1);
+				String title = rs.getString(2);
+				String contents = rs.getString(3);
+				Integer hit = rs.getInt(4);
+				String regDate = rs.getString(5);
+				Long gNo = rs.getLong(6);
+				Long oNo = rs.getLong(7);
+				Integer depth = rs.getInt(8);
+				Long userNo = rs.getLong(9);
+				String userName = rs.getString(10);
+
+				BoardVo vo = new BoardVo();
+				vo.setNo(no);
+				vo.setTitle(title);
+				vo.setContents(contents);
+				vo.setHit(hit);
+				vo.setRegDate(regDate);
+				vo.setgNo(gNo);
+				vo.setoNo(oNo);
+				vo.setDepth(depth);
+				vo.setUserNo(userNo);
+				vo.setUserName(userName);
 				
 				result.add(vo);
 			}
@@ -183,7 +282,6 @@ public class BoardDao {
 
 	public int update(Long no, String title, String contents) {
 		int result = 0;
-		ResultSet rs = null;
 		
 		try (
 			Connection conn = getConnection();
@@ -193,9 +291,6 @@ public class BoardDao {
 			pstmt.setString(2, contents);
 			pstmt.setLong(3, no);
 			result = pstmt.executeUpdate();
-			rs = pstmt.executeQuery();
-			
-			rs.close();
 		} catch(SQLException e) {
 			System.out.println("error: " + e);
 		} 
@@ -205,7 +300,6 @@ public class BoardDao {
 	
 	public int updateBeforeInsert(Long gNo, Long oNo) {
 		int result = 0;
-		ResultSet rs = null;
 		
 		try (
 			Connection conn = getConnection();
@@ -215,9 +309,22 @@ public class BoardDao {
 			pstmt.setLong(1, gNo);
 			pstmt.setLong(2, oNo);
 			result = pstmt.executeUpdate();
-			rs = pstmt.executeQuery();
-			
-			rs.close();
+		} catch(SQLException e) {
+			System.out.println("error: " + e);
+		} 
+		
+		return result;
+	}
+	
+	public int updateHit(BoardVo vo) {
+		int result = 0;
+		
+		try (
+			Connection conn = getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("UPDATE board SET hit = hit + 1 WHERE no = ?");
+		) {
+			pstmt.setLong(1, vo.getNo());
+			result = pstmt.executeUpdate();
 		} catch(SQLException e) {
 			System.out.println("error: " + e);
 		} 

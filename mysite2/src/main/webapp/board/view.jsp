@@ -32,9 +32,9 @@
 					</tr>
 				</table>
 				<div class="bottom">
-					<a href="${pageContext.request.contextPath}/board?a=write_form&g_no=${boardVo.gNo }&o_no=${boardVo.oNo }&depth=${boardVo.depth }">답글달기</a>
 					<a href="${pageContext.request.contextPath}/board">글목록</a>
 					<a href="${pageContext.request.contextPath}/board?a=modify_form&no=${boardVo.no }&writer=${boardVo.userNo }">글수정</a>
+					<a href="${pageContext.request.contextPath}/board?a=write_form&g_no=${boardVo.gNo }&o_no=${boardVo.oNo }&depth=${boardVo.depth }">답글달기</a>
 				</div>
 			</div>
 		</div>

@@ -15,7 +15,6 @@ import com.poscodx.mysite.vo.UserVo;
 public class WriteAction implements Action {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("여기는 write");
 		HttpSession session = request.getSession();
 		
 		if(session == null) {
