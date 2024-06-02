@@ -50,11 +50,15 @@
 				<%-- 페이지 수 계산(JSTL에서 ceil 함수를 지원하지 않음 -> 계산식 사용) --%>
 				<c:set var="totalPages" value="${(size/bPP)+(1-((size/bPP)%1))%1}" />
 				
+				<%-- begin과 end 계산 --%>
+				<c:set var="begin" value="${1+pageGroup*bPP }" />
+				<c:set var="end" value="${begin+bPP-1 }" />
+				
 				<%-- 페이지네이션 출력 --%>
 				<div class="pager">
 					<ul>
-						<li><a href="">◀</a></li>
-						<c:forEach begin="1" end="${bPP }" step="1" var="i">
+						<li><a href="${pageContext.servletContext.contextPath}/board?pageGroup=${pageGroup-1 }">◀</a></li>
+						<c:forEach begin="${begin }" end="${end }" step="1" var="i">
 							<c:choose>
 						        <c:when test="${i <= totalPages }">
 						            <c:if test="${i < pageNo}">
@@ -72,7 +76,7 @@
 						        </c:otherwise>
 						    </c:choose>							
 						</c:forEach>
-						<li><a href="">▶</a></li>
+						<li><a href="${pageContext.servletContext.contextPath}/board?pageGroup=${pageGroup+1 }">▶</a></li>
 					</ul>
 				</div>					
 				
