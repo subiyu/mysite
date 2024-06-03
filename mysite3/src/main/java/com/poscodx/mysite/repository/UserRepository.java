@@ -1,4 +1,4 @@
-package com.poscodx.mysite.dao;
+package com.poscodx.mysite.repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import com.poscodx.mysite.vo.UserVo;
 
-public class UserDao {
+public class UserRepository {
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 		
