@@ -52,7 +52,7 @@ public class UserRepository {
 		return result;
 	}
 
-	public UserVo findByNoAndPassword(String email, String password) {
+	public UserVo findByEmailAndPassword(String email, String password) {
 		UserVo result = null;		//test code(testOrder())에서 assertNull 검사를 하므로, 매칭되는 값이 없으면 null을 반환해야한다.
 		
 		try (
