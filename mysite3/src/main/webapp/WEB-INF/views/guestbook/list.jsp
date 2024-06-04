@@ -16,8 +16,7 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="guestbook">
-				<form action="${pageContext.request.contextPath}/guestbook" method="post">
-					<input type="hidden" name="a" value="insert">
+				<form action="${pageContext.request.contextPath}/guestbook/insert" method="post">
 					<table>
 						<tr>
 							<td>이름</td>
@@ -45,7 +44,7 @@
 									<td>${vo.name }</td>
 									<td>${vo.regDate }</td>
 									<td><a
-										href="${pageContext.request.contextPath}/guestbook?a=deleteform&no=${vo.no }">삭제</a></td>
+										href="${pageContext.request.contextPath}/guestbook/delete?no=${vo.no }">삭제</a></td>
 								</tr>
 								<tr>
 									<td colspan=4>
@@ -64,3 +63,6 @@
 	</div>
 </body>
 </html>
+<c:if test='${result == "fail" }'>
+	<script>alert("삭제 권한이 없습니다.")</script>
+</c:if>

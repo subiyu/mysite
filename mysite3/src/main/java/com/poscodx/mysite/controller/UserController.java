@@ -24,7 +24,6 @@ public class UserController {
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
 	public String join(UserVo vo) {
-		System.out.println(vo);
 		userService.join(vo);
 		return "redirect:/user/joinsuccess";
 	}
@@ -57,8 +56,8 @@ public class UserController {
 	
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) {
-		session.removeAttribute("authUser");
-		session.invalidate();
+		session.removeAttribute("authUser"); 	// 로그아웃 처리
+		session.invalidate();	//사용자의 세션을 종료하고, 서버에 저장된 세션 데이터를 삭제
 		return "redirect:/";
 	}
 	
