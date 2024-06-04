@@ -6,7 +6,7 @@ import com.poscodx.mysite.controller.action.guestbook.DeleteFormAction;
 import com.poscodx.mysite.controller.action.guestbook.InsertAction;
 import com.poscodx.mysite.controller.action.guestbook.ListAction;
 
-public class GuestbookServlet extends ActionServlet {
+public class GuestBookServlet extends ActionServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private Map<String, Action> mapAction = Map.of(
