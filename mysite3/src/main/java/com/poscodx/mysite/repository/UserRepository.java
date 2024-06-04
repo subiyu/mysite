@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Repository;
 
+import com.poscodx.mysite.exception.UserRepsotiryExceoption;
 import com.poscodx.mysite.vo.UserVo;
 
 @Repository
@@ -57,7 +58,7 @@ public class UserRepository {
 		
 		try (
 			Connection conn = getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("SELECT no, name FROM user WHERE email = ? and password = password(?)");
+			PreparedStatement pstmt = conn.prepareStatement("ELECT no, name FROM user WHERE email = ? and password = password(?)");
 		) {
 			pstmt.setString(1, email);
 			pstmt.setString(2, password);
@@ -72,7 +73,7 @@ public class UserRepository {
 			}
 			rs.close();
 		} catch(SQLException e) {
-			System.out.println("error: " + e);
+			throw new UserRepsotiryExceoption();
 		} 
 		
 		return result;
