@@ -58,7 +58,7 @@ public class UserRepository {
 		
 		try (
 			Connection conn = getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("ELECT no, name FROM user WHERE email = ? and password = password(?)");
+			PreparedStatement pstmt = conn.prepareStatement("SELECT no, name FROM user WHERE email = ? and password = password(?)");
 		) {
 			pstmt.setString(1, email);
 			pstmt.setString(2, password);

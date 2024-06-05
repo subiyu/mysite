@@ -8,13 +8,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.poscodx.mysite.vo.GuestBookVo;
 
 @Repository
 public class GuestBookRepository {
-
+	private SqlSession sqlSession;
+	
+	public GuestBookRepository(SqlSession sqlSession) {
+		this.sqlSession = sqlSession;
+	}
+	
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 		
@@ -54,34 +60,7 @@ public class GuestBookRepository {
 	}
 	
 	public List<GuestBookVo> findAll() {
-		List<GuestBookVo> result = new ArrayList<>();
-		
-		try (
-			Connection conn = getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("SELECT no, name, password, contents, date_format(reg_date, '%Y/%m/%d %H:%i:%s') FROM guestbook ORDER BY reg_date desc");
-			ResultSet rs = pstmt.executeQuery();
-		) {
-			while(rs.next()) {
-				Long no = rs.getLong(1);
-				String name = rs.getString(2);
-				String password = rs.getString(3);
-				String contents = rs.getString(4);
-				String reg_date = rs.getString(5);
-
-				GuestBookVo vo = new GuestBookVo();
-				vo.setNo(no);
-				vo.setName(name);
-				vo.setPassword(password);
-				vo.setContents(contents);
-				vo.setRegDate(reg_date);
-				
-				result.add(vo);
-			}
-		} catch (SQLException e) {
-			System.out.println("error: " + e);
-		} 
-		
-		return result;
+		return sqlSession.selectList("guestbook.findAll");
 	}
 
 	public int deleteByNo(Long no, String password) {

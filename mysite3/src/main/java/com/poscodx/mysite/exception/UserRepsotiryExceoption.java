@@ -5,7 +5,6 @@ public class UserRepsotiryExceoption extends RuntimeException {
 	
 	public UserRepsotiryExceoption() {
 		super("UserRepsotiryExceoption Occurs");
-		
 	}
 
 	public UserRepsotiryExceoption(String message) {
