@@ -23,7 +23,6 @@ public class GuestBookController {
 	public String list(Model model) {
 		List<GuestBookVo> list = guestBookService.getContentsList();
 		model.addAttribute("list", list);
-		//System.out.println(list.get(0));
 		return "guestbook/list";
 	}
 	
