@@ -25,6 +25,7 @@ public class GuestBookRepository {
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");			
 			String url = "jdbc:mariadb://192.168.0.193:3306/webdb?charset=utf8";
+			//String url = "jdbc:mariadb://192.168.35.55:3306/webdb?charset=utf8";
 			//String url = "jdbc:mariadb://172.20.10.11:3306/webdb?charset=utf8";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 		} catch(ClassNotFoundException e) {

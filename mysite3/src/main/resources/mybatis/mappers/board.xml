@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<select id="findAllByPageAndKeyword" parameterType="map" resultType="boardvo">
+		<choose>
+			<when test='keyword==null or keyword == ""'>
+				<![CDATA[
+				SELECT a.no, a.title, a.contents, a.hit, a.reg_date as regDate, a.g_no as gNo, a.o_no as oNo, a.depth, a.user_no as userNo, b.name as userName FROM board a, user b WHERE a.user_no = b.no LIMIT #{cpp } OFFSET #{offset }
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				SELECT a.no, a.title, a.contents, a.hit, a.reg_date as regDate, a.g_no as gNo, a.o_no as oNo, a.depth, a.user_no as userNo, b.name as userName FROM board a, user b WHERE a.user_no = b.no LIKE '%${keyword }%' ORDER BY g_no desc, o_no asc LIMIT #{cpp } OFFSET #{offset }
+				]]>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- <insert id="insert" parameterType="boardvo">
+		<![CDATA[
+		INSERT INTO board(title, contents, hit, reg_date, g_no, o_no, depth, user_no) VALUES(?, ?, 0, now(), (SELECT max(a.g_no)+1 FROM board), 1, 0, ?)
+		]]>
+		<selectKey keyProperty="no" resultType="Long" order="AFTER">
+			<![CDATA[
+			SELECT last_insert_id() FROM dual
+			]]>
+		</selectKey>
+	</insert>
+	
+	<delete id="deleteByNoAndPassword" parameterType="map">
+		<![CDATA[
+		DELETE FROM guestbook WHERE no = #{no } AND password = #{password }
+		]]>
+	</delete> -->
+</mapper>
