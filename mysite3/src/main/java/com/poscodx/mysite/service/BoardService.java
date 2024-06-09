@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.poscodx.mysite.repository.BoardRepository;
 import com.poscodx.mysite.vo.BoardVo;
@@ -17,6 +18,7 @@ public class BoardService {
 		this.boardRepository = boardRepository;
 	}
 
+	@Transactional
 	public void addContents(BoardVo vo) {
 		if(vo.getgNo() != null) {
 			boardRepository.updateOrderNo(vo.getgNo(), vo.getoNo());			
@@ -24,6 +26,7 @@ public class BoardService {
 		boardRepository.insert(vo);
 	}
 	
+	@Transactional
 	public BoardVo getContents(Long no) {
 		BoardVo vo = boardRepository.findByNo(no);
 		if(vo != null) {
@@ -51,6 +54,7 @@ public class BoardService {
 		boardRepository.deleteByNoAndUserNo(boardNo, userNo);
 	}
 	
+	@Transactional
 	public Map<String, Object> getContentsList(int currentPage, String keyword) {
 		final int contentsPerPage = 5; 		//한 페이지 당 5개의 게시물을 보여줌
 		final int pagePerGroup = 5; 		//그룹당 5개의 페이지를 보여줌
