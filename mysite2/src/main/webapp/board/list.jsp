@@ -57,7 +57,7 @@
 				<%-- 페이지네이션 출력 --%>
 				<div class="pager">
 					<ul>
-						<li><a href="${pageContext.servletContext.contextPath}/board?pageGroup=${pageGroup-1 }">◀</a></li>
+						<li><a href="${pageContext.servletContext.contextPath}/board?page=${prevPage }">◀</a></li>
 						<c:forEach begin="${begin }" end="${end }" step="1" var="i">
 							<c:choose>
 						        <c:when test="${i <= totalPages }">
@@ -76,7 +76,7 @@
 						        </c:otherwise>
 						    </c:choose>							
 						</c:forEach>
-						<li><a href="${pageContext.servletContext.contextPath}/board?pageGroup=${pageGroup+1 }">▶</a></li>
+						<li><a href="${pageContext.servletContext.contextPath}/board?page=${nextPage }">▶</a></li>
 					</ul>
 				</div>					
 				

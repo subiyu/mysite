@@ -15,8 +15,7 @@
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="${pageContext.request.contextPath}/board" method="post">
-					<input type="hidden" name="a" value="search_board">
-					<input type="text" id="kwd" name="kwd">
+					<input type="text" id="keyword" name="keyword">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -37,37 +36,30 @@
 							<c:if test='${vo.depth > 0 }'>
 								<img src='${pageContext.servletContext.contextPath }/assets/images/reply.png'>
 							</c:if>
-								<a href="${pageContext.request.contextPath}/board?a=view&no=${vo.no }">${vo.title }</a>
+								<a href="${pageContext.request.contextPath}/board/view/${vo.no }">${vo.title }</a>
 							</td>
 							<td>${vo.userName }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
-							<td><a href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no }&writer=${vo.userNo }" class="del">삭제</a></td>
+							<td><a href="${pageContext.request.contextPath}/board/delete/${vo.no }" class="del" style="background-image:url(${pageContext.request.contextPath }/assets/images/recycle.png)">삭제</a></td>
 						</tr>
 					</c:forEach>
 				</table>
 				
-				<%-- 페이지 수 계산(JSTL에서 ceil 함수를 지원하지 않음 -> 계산식 사용) --%>
-				<c:set var="totalPages" value="${(size/bPP)+(1-((size/bPP)%1))%1}" />
-				
-				<%-- begin과 end 계산 --%>
-				<c:set var="begin" value="${1+pageGroup*bPP }" />
-				<c:set var="end" value="${begin+bPP-1 }" />
-				
 				<%-- 페이지네이션 출력 --%>
 				<div class="pager">
 					<ul>
-						<li><a href="${pageContext.servletContext.contextPath}/board?pageGroup=${pageGroup-1 }">◀</a></li>
-						<c:forEach begin="${begin }" end="${end }" step="1" var="i">
+						<li><a href="${pageContext.servletContext.contextPath}/board?page=${prevPage }">◀</a></li>
+						<c:forEach begin="${beginPage }" end="${endPage }" step="1" var="i">
 							<c:choose>
-						        <c:when test="${i <= totalPages }">
-						            <c:if test="${i < pageNo}">
+						        <c:when test="${i <= totalPage }">
+						            <c:if test="${i < currentPage}">
 						                <li><a href="${pageContext.servletContext.contextPath}/board?page=${i}">${i}</a></li>
 						            </c:if>
-						            <c:if test="${i == pageNo}">
+						            <c:if test="${i == currentPage}">
 						                <li class="selected">${i}</li>
 						            </c:if>
-						            <c:if test="${i > pageNo}">
+						            <c:if test="${i > currentPage}">
 						                <li><a href="${pageContext.servletContext.contextPath}/board?page=${i}">${i}</a></li>
 						            </c:if>
 						        </c:when>
@@ -76,12 +68,12 @@
 						        </c:otherwise>
 						    </c:choose>							
 						</c:forEach>
-						<li><a href="${pageContext.servletContext.contextPath}/board?pageGroup=${pageGroup+1 }">▶</a></li>
+						<li><a href="${pageContext.servletContext.contextPath}/board?page=${nextPage }">▶</a></li>
 					</ul>
 				</div>					
 				
 				<div class="bottom">
-					<a href="${pageContext.servletContext.contextPath }/board?a=write_form&g_no=-1&o_no=-1&depth=-1" id="new-book">글쓰기</a>
+					<a href="${pageContext.servletContext.contextPath }/board/write?isNew=true" id="new-book">글쓰기</a>
 				</div>				
 			</div>
 		</div>

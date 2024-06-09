@@ -17,32 +17,39 @@ public class BoardService {
 		this.boardRepository = boardRepository;
 	}
 
-	/* public BoardVo addContents(BoardVo vo) {
-		//스프링 레포 만들땐 분리를 해라.
-		//boardRepository.updateOrderNo(...);
-		//boardRepository.insert(vo);
+	public void addContents(BoardVo vo) {
+		if(vo.getgNo() != null) {
+			boardRepository.updateOrderNo(vo.getgNo(), vo.getoNo());			
+		}
+		boardRepository.insert(vo);
 	}
 	
 	public BoardVo getContents(Long no) {
-//			BoardVo = baordVoRepository.findByNo(no);
-//			if(vo != null) {
-//				boardRepository.updateHit();
-//			}
-//			
-//			return vo;
+		BoardVo vo = boardRepository.findByNo(no);
+		if(vo != null) {
+			//TODO: session 정보 저장해서 하루 동안은 동일 아이디로 접속했을때 조회수가 오르지 않는 기능 추가
+			boardRepository.updateHit(vo);
+		}
+		
+		return vo;
 	}
 	
 	public BoardVo getContents(Long boardNo, Long userNo) {
-	
+		BoardVo vo = boardRepository.findByNoAndUserNo(boardNo, userNo);
+		return vo;
 	}
 	
-	public void updateContents(BoardVo vo) {
-		
+	public int getTotalCount(String keyword) {
+		return boardRepository.getTotalCount(keyword);
+	}
+	
+	public int updateContents(BoardVo vo) {
+		return boardRepository.update(vo.getNo(), vo.getTitle(), vo.getContents());
 	}
 	
 	public void deleteContents(Long boardNo, Long userNo) {
- 
-	} */
+		boardRepository.deleteByNoAndUserNo(boardNo, userNo);
+	}
 	
 	public Map<String, Object> getContentsList(int currentPage, String keyword) {
 		final int contentsPerPage = 5; 		//한 페이지 당 5개의 게시물을 보여줌
@@ -51,12 +58,12 @@ public class BoardService {
 		int beginPage = pagePerGroup*((currentPage-1)/pagePerGroup) + 1;
 		int endPage = beginPage + pagePerGroup - 1;
 		int offset = (currentPage - 1) * contentsPerPage; // 페이지 오프셋 계산(no가 1부터 시작)
-        int prevPage = beginPage - 1; //왜 필요하지?
-        int nextPage = endPage + 1;
-		
+		int prevPage = beginPage - 1;
+		int nextPage = endPage + 1;
 		List<BoardVo> list = boardRepository.findAllByPageAndKeyword(contentsPerPage, offset, keyword);
-		int listSize = list.size();
-		double totalPage = Math.ceil(listSize/contentsPerPage);
+		int totalCount = boardRepository.getTotalCount(keyword);
+		int totalPage = (int)Math.ceil(totalCount/contentsPerPage);
+		
 		if (currentPage > totalPage) {
         	return null;
         }
@@ -65,9 +72,8 @@ public class BoardService {
 		Map<String, Object> map = new HashMap<>();
 		map.put("list", list);
 		map.put("keyword", keyword);
-		//map.put("pager", pager); 이건 페이저 객체
-		//map.put("totalCount", 0);
-		map.put("listSize", listSize);
+		map.put("totalCount", totalCount);
+		map.put("totalPage", totalPage);
 		map.put("currentPage", currentPage);
 		map.put("beginPage", beginPage);
 		map.put("endPage", endPage);

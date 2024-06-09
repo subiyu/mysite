@@ -84,8 +84,8 @@ public class UserController {
 			return "redirect:/";
 		}
 		////////////////////////
-		
-		vo.setNo(authUser.getNo());
+
+		vo.setNo(authUser.getNo()); //TODO: 왜 설정해야하는지 생각해보기
 		userService.update(vo);
 		
 		authUser.setName(vo.getName());

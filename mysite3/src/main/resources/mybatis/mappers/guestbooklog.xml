@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="guestbooklog">
+	<insert id="insert" >
+		<![CDATA[
+		INSERT INTO guestbook_log VALUES(current_date(), 1)
+		]]>
+	</insert>
+	
+	<update id="update-increase">
+		<![CDATA[
+		UPDATE guestbook_log SET count = count + 1 WHERE date = current_date()
+		]]>
+	</update>
+	
+	<update id="update-decrease" parameterType="Long">
+		<![CDATA[
+		UPDATE guestbook_log SET count = count - 1 WHERE date = (SELECT date(reg_date) FROM guestbook WHERE no = #{no })
+		]]>
+	</update>
+</mapper>
