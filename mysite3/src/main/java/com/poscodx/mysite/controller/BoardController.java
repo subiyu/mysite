@@ -63,12 +63,10 @@ public class BoardController {
 	
 	@RequestMapping("/delete/{no}")
 	public String delete(HttpSession session, @PathVariable("no") Long no) {
-		// access control 
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/";
 		}
-		////////////////////////
 		
 		boardService.deleteContents(no, authUser.getNo());
 		return "redirect:/board";
@@ -76,12 +74,10 @@ public class BoardController {
 	
 	@RequestMapping("/modify/{no}")	
 	public String modify(HttpSession session, @PathVariable("no") Long no, Model model) {
-		// access control 
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/";
 		}
-		////////////////////////
 		
 		BoardVo vo = boardService.getContents(no, authUser.getNo());
 		if(vo == null) {
@@ -95,12 +91,10 @@ public class BoardController {
 	
 	@RequestMapping(value="/modify", method=RequestMethod.POST)	
 	public String modify(HttpSession session, BoardVo vo) {
-		// access control 
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/";
 		}
-		////////////////////////
 				
 		boardService.updateContents(vo);
 		
@@ -115,14 +109,13 @@ public class BoardController {
 		return "board/write";
 	}
 	
+	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.POST)	
 	public String write(HttpSession session, BoardVo vo) {
-		// access control 
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/";
 		}
-		////////////////////////
 				
 		vo.setUserNo(authUser.getNo());
 		
@@ -131,14 +124,13 @@ public class BoardController {
 		return "redirect:/board/view/" + vo.getNo();
 	}
 	
+	@Auth
 	@RequestMapping(value="/reply", method=RequestMethod.POST)	
 	public String reply(HttpSession session, BoardVo vo) {
-		// access control 
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/";
 		}
-		////////////////////////
 		
 		BoardVo parentVo = boardService.getContents(vo.getNo());
 		vo.setgNo(parentVo.getgNo());
