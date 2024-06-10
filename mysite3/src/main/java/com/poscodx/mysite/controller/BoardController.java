@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.poscodx.mysite.security.Auth;
 import com.poscodx.mysite.service.BoardService;
 import com.poscodx.mysite.vo.BoardVo;
 import com.poscodx.mysite.vo.UserVo;
@@ -106,15 +107,9 @@ public class BoardController {
 		return "redirect:/board/view/"+ vo.getNo();
 	}
 	
-	@RequestMapping(value="/write")	
-	public String write(HttpSession session, boolean isNew, Model model) {
-		// access control 
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		if(authUser == null) {
-			return "redirect:/";
-		}
-		////////////////////////
-		
+	@Auth
+	@RequestMapping(value="/write", method=RequestMethod.GET)
+	public String write(boolean isNew, Model model) {
 		model.addAttribute("isNew", isNew);
 		
 		return "board/write";
@@ -155,4 +150,101 @@ public class BoardController {
 		
 		return "redirect:/board/view/" + vo.getNo();
 	}
+	
+	/* @RequestMapping("/view/{no}")
+	public String view(@PathVariable("no") Long no, Model model) {
+		BoardVo vo = boardService.getContents(no);
+		model.addAttribute("boardVo", vo);
+		return "board/view";
+	}
+	
+	@Auth
+	@RequestMapping("/delete/{no}")
+	public String delete(@AuthUser UserVo authUser, @PathVariable("no") Long no) {
+		// access control 
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(authUser == null) {
+			return "redirect:/";
+		}
+		////////////////////////
+		
+		boardService.deleteContents(no, authUser.getNo());
+		return "redirect:/board";
+	}
+	
+	@Auth
+	@RequestMapping("/modify/{no}")	
+	public String modify(@AuthUser UserVo authUser, @PathVariable("no") Long no, Model model) {
+		// access control 
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(authUser == null) {
+			return "redirect:/";
+		}
+		////////////////////////
+		
+		BoardVo vo = boardService.getContents(no, authUser.getNo());
+		if(vo == null) {
+			return "redirect:/board/" + no;
+		}
+		
+		model.addAttribute(vo);
+		
+		return "board/modify";
+	}
+	
+	@Auth
+	@RequestMapping(value="/modify", method=RequestMethod.POST)	
+	public String modify(@AuthUser UserVo authUser, BoardVo vo) {
+				
+		boardService.updateContents(vo);
+		
+		return "redirect:/board/view/"+ vo.getNo();
+	}
+
+	@Auth
+	@RequestMapping(value="/write")	
+	public String write(boolean isNew, Model model) {
+		
+		model.addAttribute("isNew", isNew);
+		
+		return "board/write";
+	}
+	
+	@Auth
+	@RequestMapping(value="/write", method=RequestMethod.POST)	
+	public String write(@AuthUser UserVo authUser, BoardVo vo) {
+		// access control 
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(authUser == null) {
+			return "redirect:/";
+		}
+		////////////////////////
+				
+		vo.setUserNo(authUser.getNo());
+		
+		boardService.addContents(vo);
+		
+		return "redirect:/board/view/" + vo.getNo();
+	}
+	
+	@Auth
+	@RequestMapping(value="/reply", method=RequestMethod.POST)	
+	public String reply(@AuthUser UserVo authUser, BoardVo vo) {
+		// access control 
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(authUser == null) {
+			return "redirect:/";
+		}
+		////////////////////////
+		
+		BoardVo parentVo = boardService.getContents(vo.getNo());
+		vo.setgNo(parentVo.getgNo());
+		vo.setoNo(parentVo.getoNo()+1); 		// 부모글 order_no + 1
+		vo.setDepth(parentVo.getDepth()+1);
+		vo.setUserNo(authUser.getNo());
+
+		boardService.addContents(vo);
+		
+		return "redirect:/board/view/" + vo.getNo();
+	} */
 }

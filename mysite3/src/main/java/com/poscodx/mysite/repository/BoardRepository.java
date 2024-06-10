@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StopWatch;
 
 import com.poscodx.mysite.vo.BoardVo;
 import com.poscodx.mysite.vo.GuestBookVo;
@@ -26,7 +27,11 @@ public class BoardRepository {
 	}
 	
 	public int insert(BoardVo vo) {
+		//StopWatch sw = new StopWatch();
+		//sw.start();
 		return sqlSession.insert("board.insert", vo);
+		//sw.stop();
+		//int totalTime = sw.getTotalTimeMillis();
 	}
 
 	public List<BoardVo> findAllByPageAndKeyword(int contentsPerPage, int offset, String keyword) {

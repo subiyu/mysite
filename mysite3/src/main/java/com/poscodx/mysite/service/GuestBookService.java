@@ -26,7 +26,11 @@ public class GuestBookService {
 	public void deleteContents(Long no, String password) {
 		//guestBookRepository.deleteByNoAndPassword(no, password);
 		guestBookLogRepository.update(no);
-		guestBookRepository.deleteByNoAndPassword(no, password);
+	
+		int count = guestBookRepository.deleteByNoAndPassword(no, password);
+		if(count == 1) {
+			//TODO: 버그 수정
+		}
 	}
 	
 	@Transactional

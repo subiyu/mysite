@@ -17,7 +17,6 @@ public class GlobalExceptionHandler {
 		e.printStackTrace(new PrintWriter(errors));
 		System.out.println(errors.toString());
 		
-		
 		//2. 사과(종료)
 		model.addAttribute("error", errors.toString());
 		return "errors/exception";

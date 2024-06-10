@@ -38,7 +38,7 @@ public class UserController {
 		return "user/login";
 	}
 	
-	@RequestMapping(value="/login", method=RequestMethod.POST)
+	/* @RequestMapping(value="/login", method=RequestMethod.POST)
 	public String login(HttpSession session, UserVo vo, Model model) {
 		UserVo authUser = userService.getUser(vo.getEmail(), vo.getPassword());
 		if(authUser == null) {
@@ -52,7 +52,7 @@ public class UserController {
 		session.setAttribute("authUser", authUser);
 		
 		return "redirect:/";
-	}
+	} */
 	
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) {
