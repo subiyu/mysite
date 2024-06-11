@@ -15,7 +15,7 @@
 		<div id="content">
 			<div id="board">
 			<c:choose>
-				<c:when test='${param.isNew }'>
+				<c:when test="${param.isNew eq true }">
 					<c:set var="formAction" value="write" />
 				</c:when>
 				<c:otherwise>
@@ -31,7 +31,6 @@
 				<tr>
 					<td class="label">제목</td>
 					<td><input type="text" name="title" value=""></td>
-					<td><input type="hidden" name="no" value="${param.no }"></td>
 				</tr>
 				<tr>
 					<td class="label">내용</td>
@@ -44,6 +43,7 @@
 				<a href="${pageContext.request.contextPath}/board">취소</a>
 				<input type="submit" value="등록">
 			</div>
+			<input type="hidden" name="no" value="${param.no }">
 		</form>				
 			</div>
 		</div>

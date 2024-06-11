@@ -13,6 +13,8 @@ import com.poscodx.mysite.vo.BoardVo;
 @Service
 public class BoardService {
 	private BoardRepository boardRepository;
+	public final int contentsPerPage = 5; 		//한 페이지 당 5개의 게시물을 보여줌
+	public final int pagePerGroup = 5; 		//그룹당 5개의 페이지를 보여줌
 	
 	public BoardService(BoardRepository boardRepository) {
 		this.boardRepository = boardRepository;
@@ -56,9 +58,6 @@ public class BoardService {
 	
 	@Transactional
 	public Map<String, Object> getContentsList(int currentPage, String keyword) {
-		final int contentsPerPage = 5; 		//한 페이지 당 5개의 게시물을 보여줌
-		final int pagePerGroup = 5; 		//그룹당 5개의 페이지를 보여줌
-		
 		int beginPage = pagePerGroup*((currentPage-1)/pagePerGroup) + 1;
 		int endPage = beginPage + pagePerGroup - 1;
 		int offset = (currentPage - 1) * contentsPerPage; // 페이지 오프셋 계산(no가 1부터 시작)
@@ -66,7 +65,7 @@ public class BoardService {
 		int nextPage = endPage + 1;
 		List<BoardVo> list = boardRepository.findAllByPageAndKeyword(contentsPerPage, offset, keyword);
 		int totalCount = boardRepository.getTotalCount(keyword);
-		int totalPage = (int)Math.ceil(totalCount/contentsPerPage);
+		int totalPage = (int)Math.ceil(totalCount/(double)contentsPerPage);
 		
 		if (currentPage > totalPage) {
         	return null;

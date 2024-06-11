@@ -15,7 +15,7 @@
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="${pageContext.request.contextPath}/board" method="post">
-					<input type="text" id="keyword" name="keyword">
+					<input type="text" id="kwd" name="kwd">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -49,18 +49,18 @@
 				<%-- 페이지네이션 출력 --%>
 				<div class="pager">
 					<ul>
-						<li><a href="${pageContext.servletContext.contextPath}/board?page=${prevPage }">◀</a></li>
+						<li><a href="${pageContext.servletContext.contextPath}/board?p=${prevPage }&kwd=${keyword }">◀</a></li>
 						<c:forEach begin="${beginPage }" end="${endPage }" step="1" var="i">
 							<c:choose>
 						        <c:when test="${i <= totalPage }">
 						            <c:if test="${i < currentPage}">
-						                <li><a href="${pageContext.servletContext.contextPath}/board?page=${i}">${i}</a></li>
+						                <li><a href="${pageContext.servletContext.contextPath}/board?p=${i}&kwd=${keyword }">${i}</a></li>
 						            </c:if>
 						            <c:if test="${i == currentPage}">
 						                <li class="selected">${i}</li>
 						            </c:if>
 						            <c:if test="${i > currentPage}">
-						                <li><a href="${pageContext.servletContext.contextPath}/board?page=${i}">${i}</a></li>
+						                <li><a href="${pageContext.servletContext.contextPath}/board?p=${i}&kwd=${keyword }">${i}</a></li>
 						            </c:if>
 						        </c:when>
 						        <c:otherwise>
@@ -68,7 +68,7 @@
 						        </c:otherwise>
 						    </c:choose>							
 						</c:forEach>
-						<li><a href="${pageContext.servletContext.contextPath}/board?page=${nextPage }">▶</a></li>
+						<li><a href="${pageContext.servletContext.contextPath}/board?p=${nextPage }&kwd=${keyword }">▶</a></li>
 					</ul>
 				</div>					
 				

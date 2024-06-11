@@ -41,8 +41,6 @@ public class UserController {
 	@Auth
 	@RequestMapping(value="/update", method=RequestMethod.GET)
 	public String update(@AuthUser UserVo authUser, Model model) {
-		//UserVo authUser = (UserVo)session.getAttribute("authUser");
-		
 		UserVo vo = userService.getUser(authUser.getNo());
 		model.addAttribute("userVo", vo);
 		
@@ -52,11 +50,6 @@ public class UserController {
 	@Auth
 	@RequestMapping(value="/update", method=RequestMethod.POST)
 	public String update(@AuthUser UserVo authUser, UserVo vo) {
-//		UserVo authUser = (UserVo)session.getAttribute("authUser");
-//		if(authUser == null) {
-//			return "redirect:/";
-//		}
-
 		vo.setNo(authUser.getNo()); //TODO: 왜 설정해야하는지 생각해보기
 		userService.update(vo);
 		
