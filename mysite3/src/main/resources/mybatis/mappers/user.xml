@@ -4,7 +4,7 @@
 <mapper namespace="user">
 	<insert id="insert" parameterType="uservo">
 		<![CDATA[
-		INSERT INTO user VALUES(null, #{name }, #{email }, password(#{password }), #{gender }, current_date())
+		INSERT INTO user VALUES(null, #{name }, #{email }, password(#{password }), #{gender }, current_date(), 'USER')
 		]]>
 		<selectKey keyProperty="no" resultType="long" order="AFTER">
 			<![CDATA[
@@ -15,13 +15,13 @@
 	
 	<select id="findByEmailAndPassword" parameterType="map" resultType="uservo">
 		<![CDATA[
-		SELECT no, name FROM user WHERE email = #{email } and password = password(#{password })
+		SELECT no, name, role FROM user WHERE email = #{email } and password = password(#{password })
 		]]>
 	</select>
 	
 	<select id="findByNo" parameterType="Long" resultType="uservo">
 		<![CDATA[
-		SELECT no, name, email, gender FROM user WHERE no = #{no }
+		SELECT no, name, email, gender, role FROM user WHERE no = #{no }
 		]]>
 	</select>
 	

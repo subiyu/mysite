@@ -11,15 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.poscodx.mysite.service.GuestBookService;
+import com.poscodx.mysite.service.SiteService;
 import com.poscodx.mysite.vo.GuestBookVo;
 
 @Controller
 @RequestMapping("/guestbook")
 public class GuestBookController {
-	@Autowired
 	private GuestBookService guestBookService;
-	
-	@RequestMapping({"/", "/main"})
+	private SiteService siteService;
+
+	@RequestMapping("")
 	public String list(Model model) {
 		List<GuestBookVo> list = guestBookService.getContentsList();
 		model.addAttribute("list", list);
