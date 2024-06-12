@@ -36,7 +36,6 @@ public class AdminController {
 	public String main(Model model) {
 		SiteVo vo = siteService.getSite();
 		model.addAttribute("siteVo", vo);
-		System.out.println("전 siteVo" + vo);
 		
 		return "admin/main";
 	}
@@ -50,7 +49,6 @@ public class AdminController {
 		
 		siteService.updateSite(vo);
 		servletContext.setAttribute("siteVo", vo);
-		System.out.println("후 siteVo" + vo);
 		return "redirect:/admin";
 	}
 	
