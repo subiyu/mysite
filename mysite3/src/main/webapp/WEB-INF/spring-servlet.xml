@@ -13,8 +13,27 @@
 	<!-- auto proxy -->
 	<aop:aspectj-autoproxy />
 
-	<!-- validator, 기본 messageConverter 외에 다른 messageConverter 자동으로 등록 -->
 	<mvc:annotation-driven>
+		<!-- MessageConverters -->
+		<mvc:message-converters>
+			<bean
+				class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json; charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+
 		<!-- Argument Resolver 등록 -->
 		<mvc:argument-resolvers>
 			<bean
@@ -42,6 +61,10 @@
 			<mvc:exclude-mapping path="/assets/**" />
 			<bean class="com.poscodx.mysite.security.AuthInterceptor" />
 		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.poscodx.mysite.interceptor.SiteInterceptor" />
+		</mvc:interceptor>
 	</mvc:interceptors>
 
 	<!-- View Resolver -->
@@ -58,10 +81,11 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<!-- mvc url-resource mapping -->
-	<mvc:resources mapping="/assets/upload-images/**" location="file:/mysite-uploads/" />
-	
+	<mvc:resources mapping="/assets/upload-images/**"
+		location="file:/mysite-uploads/" />
+
 	<!-- Multipart Resolver -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

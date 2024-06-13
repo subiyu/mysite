@@ -18,7 +18,6 @@ public class SiteService {
 	}
 	
 	public void updateSite(SiteVo vo) {
-		System.out.println("얍얍"+vo);
 		siteRepository.update(vo);
 	}
 	

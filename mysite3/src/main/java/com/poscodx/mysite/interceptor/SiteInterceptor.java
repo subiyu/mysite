@@ -26,7 +26,4 @@ public class SiteInterceptor implements HandlerInterceptor {
 		
 		return true;
 	}
-	
-
 }
-//@Auth, admin update 구현, 사이트 인터셉트 구현, main.jsp 애 찾아와서
