@@ -14,6 +14,10 @@ import com.poscodx.mysite.vo.GuestBookVo;
 @RequestMapping("/guestbook")
 public class GuestBookController {
 	private GuestBookService guestBookService;
+	
+	public GuestBookController(GuestBookService guestBookService) {
+		this.guestBookService = guestBookService;
+	}
 
 	@RequestMapping("")
 	public String list(Model model) {

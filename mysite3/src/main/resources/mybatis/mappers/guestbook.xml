@@ -12,7 +12,7 @@
 		<![CDATA[
 		INSERT INTO guestbook VALUES(null, #{name }, #{password }, #{contents }, now())
 		]]>
-		<selectKey keyProperty="no" resultType="Long" order="AFTER">
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
 			<![CDATA[
 			SELECT last_insert_id() FROM dual
 			]]>

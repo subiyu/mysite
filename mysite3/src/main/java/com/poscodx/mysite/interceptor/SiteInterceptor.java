@@ -20,7 +20,7 @@ public class SiteInterceptor implements HandlerInterceptor {
 			throws Exception {
 		SiteVo siteVo = (SiteVo)request.getServletContext().getAttribute("siteVo");
 		if(siteVo == null) {
-			siteVo = siteService.getSite();
+			siteVo = siteService.getSite(); 	//DB에서 site 정보를 가져옴
 			request.getServletContext().setAttribute("siteVo", siteVo);
 		}
 		

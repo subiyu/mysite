@@ -111,6 +111,9 @@
 		<!-- defaultEncoding -->
 		<property name="defaultEncoding" value="utf-8" />
 	</bean>
+	
+	<!-- ApplicationContextEventListner -->
+	<bean class="com.poscodx.mysite.event.ApplicationContextEventListener" />
 
 	<context:annotation-config />
 	<context:component-scan
