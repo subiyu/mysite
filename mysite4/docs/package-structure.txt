@@ -1,6 +1,6 @@
 [src/main/java]
 	com
-	 |--- douzone
+	 |--- poscodx
 	 |		|--- mysite	
 	 |		|		|--- config
 	 |		|		|		|--- AppConfig.java
@@ -19,7 +19,7 @@
 
 [src/main/resources]
 	com
-	 |--- douzone
+	 |--- poscodx
 	 |		|--- mysite
 	 |		|		|--- app
 	 |		|		|	  |--- jdbc.properties
