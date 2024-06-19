@@ -14,6 +14,7 @@ import org.apache.ibatis.logging.LogFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.poscodx.mysite.dto.JsonResult;
@@ -52,10 +53,16 @@ public class GlobalExceptionHandler {
 			os.close();
 		} else {
 			// 4. 사과 페이지(정상 종료)
-			request.setAttribute("error", errors.toString());
-			request
-				.getRequestDispatcher("/WEB-INF/views/errors/exception")
+			if(e instanceof NoHandlerFoundException) {
+				request
+					.getRequestDispatcher("/WEB-INF/views/errors/404.jsp")
+					.forward(request, response);
+			} else {
+				request.setAttribute("error", errors.toString());
+				request
+				.getRequestDispatcher("/WEB-INF/views/errors/exception.jsp")
 				.forward(request, response);
+			}
 		}
 	}
 }

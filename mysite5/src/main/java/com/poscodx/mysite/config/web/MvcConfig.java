@@ -15,6 +15,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -72,11 +73,17 @@ public class MvcConfig implements WebMvcConfigurer {
 	}
 
 	
-	// Default Servlet Handler
+//	// Default Servlet Handler
+//	@Override
+//	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+//		configurer.enable();
+//	}
+	
+	// static(assets) url mapping
 	@Override
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-		configurer.enable();
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry
+			.addResourceHandler("/assets/**")
+			.addResourceLocations("classpath:assets/");
 	}
-	
-	
 }
