@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<select id="findAllByPageAndKeyword" parameterType="map" resultType="boardvo">
+		<choose>
+			<when test='keyword==null or keyword == ""'>
+				<![CDATA[
+				SELECT a.no, 
+								a.title, 
+								a.contents, 
+								a.hit, 
+								a.reg_date as regDate, 
+								a.g_no as gNo, 
+								a.o_no as oNo, 
+								a.depth, 
+								a.user_no as userNo, 
+								b.name as userName 
+				FROM board a, user b 
+				WHERE a.user_no = b.no 
+				ORDER BY g_no desc, o_no asc 
+				LIMIT #{cpp } OFFSET #{offset }
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				SELECT a.no, 
+								a.title, 
+								a.contents, 
+								a.hit, 
+								a.reg_date as regDate, 
+								a.g_no as gNo, 
+								a.o_no as oNo, 
+								a.depth, 
+								a.user_no as userNo, 
+								b.name as userName 
+				FROM board a, user b 
+				WHERE a.user_no = b.no 
+				AND a.title LIKE '%${keyword }%' OR a.contents LIKE '%${keyword }%' 
+				ORDER BY g_no desc, o_no asc 
+				LIMIT #{cpp } OFFSET #{offset }
+				]]>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findByNo" parameterType="long" resultType="boardvo">
+		<![CDATA[
+		SELECT no, 
+					title, 
+					contents, 
+					hit, 
+					reg_date as regDate, 
+					g_no as gNo, 
+					o_no as oNo, 
+					depth, 
+					user_no as userNo 
+		FROM board 
+		WHERE no=#{no }
+		]]>
+	</select>
+	
+	<select id="findByNoAndUserNo" parameterType="map" resultType="boardvo">
+		<![CDATA[
+		SELECT no, 
+					title, 
+					contents, 
+					hit, 
+					reg_date as regDate, 
+					g_no as gNo, 
+					o_no as oNo, 
+					depth, 
+					user_no as userNo 
+		FROM board 
+		WHERE no=#{boardNo } 
+		AND user_no=#{userNo }
+		]]>
+	</select>
+	
+	<select id="totalCount" parameterType="string" resultType="integer">
+		<choose>
+			<when test='keyword==null or keyword == ""'>
+			<![CDATA[
+			SELECT count(*) FROM board
+			]]>
+			</when>
+			<otherwise>
+			<![CDATA[
+			SELECT count(*) FROM board WHERE title LIKE '%${keyword }%'
+			]]>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" parameterType="boardvo">
+		<choose>
+			<when test='gNo == null'>
+				<![CDATA[
+				INSERT INTO board 
+					VALUES(null, 
+							#{title }, 
+							#{contents }, 
+							0, 
+							now(), 
+							(SELECT max(a.g_no)+1 FROM board a), 
+							1, 
+							0, 
+							#{userNo })
+				]]>
+			</when>
+			<otherwise>
+			<![CDATA[
+			INSERT INTO board 
+				VALUES(null, 
+						#{title }, 
+						#{contents }, 
+						0, 
+						now(), 
+						#{gNo }, 
+						#{oNo }, 
+						#{depth }, 
+						#{userNo })
+			]]>
+			</otherwise>
+		</choose>
+		
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+			<![CDATA[
+			SELECT last_insert_id() FROM dual
+			]]>
+		</selectKey>
+	</insert>
+	
+	<delete id="delete" parameterType="map">
+		<![CDATA[
+		DELETE FROM board 
+		WHERE no = #{boardNo } 
+		AND user_no = #{userNo }
+		]]>
+	</delete>
+	
+	<update id="update" parameterType="map">
+		<![CDATA[
+		UPDATE board 
+			SET title=#{title }, 
+			contents=#{contents } 
+		WHERE no=#{no }
+		]]>
+	</update>
+	
+	<update id="updateOrderNo" parameterType="map">
+		<![CDATA[
+		UPDATE board 
+			SET o_no = o_no + 1 
+		WHERE g_no = #{gNo } 
+		AND o_no >= #{oNo }
+		]]>
+	</update>
+	
+	<update id="updateHit" parameterType="boardvo">
+		<![CDATA[
+		UPDATE board 
+			SET hit = hit + 1 
+			WHERE no = #{no }
+		]]>
+	</update>
+</mapper>
