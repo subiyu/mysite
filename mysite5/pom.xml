@@ -61,7 +61,7 @@
 			<artifactId>spring-jdbc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-
+		
 		<!-- spring aspect -->
 		<dependency>
 			<groupId>org.springframework</groupId>
