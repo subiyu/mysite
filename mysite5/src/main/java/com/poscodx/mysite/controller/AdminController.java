@@ -4,6 +4,7 @@ import javax.servlet.ServletContext;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,9 @@ public class AdminController {
 
 	@RequestMapping("")
 	public String main(Model model) {
+		//ThreadLocal<String> th = new ThreadLocal<String>();
+		//th.set("th");
+		
 		SiteVo vo = siteService.getSite();
 		model.addAttribute("siteVo", vo);
 		
