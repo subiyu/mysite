@@ -51,14 +51,22 @@ public class GlobalExceptionHandler {
 		} else {
 			// 4. 사과 페이지(정상 종료)
 			if(e instanceof NoHandlerFoundException) {
+				/*
+				 * request .getRequestDispatcher("/WEB-INF/views/errors/404.jsp")
+				 * .forward(request, response);
+				 */
 				request
-					.getRequestDispatcher("/WEB-INF/views/errors/404.jsp")
-					.forward(request, response);
+				.getRequestDispatcher("/error/404")
+				.forward(request, response);
 			} else {
 				request.setAttribute("error", errors.toString());
+				/*
+				 * request .getRequestDispatcher("/WEB-INF/views/errors/exception.jsp")
+				 * .forward(request, response);
+				 */
 				request
-				.getRequestDispatcher("/WEB-INF/views/errors/exception.jsp")
-				.forward(request, response);
+					.getRequestDispatcher("/error/500")
+					.forward(request, response);
 			}
 		}
 	}
