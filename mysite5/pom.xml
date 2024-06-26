@@ -1,14 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.poscodx</groupId>
-    <artifactId>mysite</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>mysite5</artifactId>
-  <packaging>war</packaging>
-  
-  <properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.poscodx</groupId>
+	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>mysite5</artifactId>
+	<packaging>war</packaging>
+
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.outputEncoding>UTF-8</project.build.outputEncoding>
 		<maven.compiler.source>17</maven.compiler.source>
@@ -33,21 +32,21 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<!-- spring security web -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 			<version>${org.springframework.security-version}</version>
 		</dependency>
-		
+
 		<!-- spring-security-config -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>${org.springframework.security-version}</version>
 		</dependency>
-		
+
 		<!-- spring security config tag library -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -61,7 +60,7 @@
 			<artifactId>spring-jdbc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-		
+
 		<!-- spring aspect -->
 		<dependency>
 			<groupId>org.springframework</groupId>
