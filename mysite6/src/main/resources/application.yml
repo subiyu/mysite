@@ -16,6 +16,7 @@ spring:
    # mvc
    mvc:
       static-path-pattern: /assets/**
+      throw-exception-if-no-handler-found: true
 #      view:
 #         prefix: /WEB-INF/views/
 #         suffix: .jsp
@@ -23,7 +24,7 @@ spring:
    # web
    web:
       resources:
-        static-location: file:/mysite-uploads/, classpath:assets/
+        static-locations: file:/mysite-uploads/, classpath:assets/
         
    # message resources(internationalization, i18n)
    messages:
@@ -62,6 +63,10 @@ server:
       encoding: 
          charset: utf-8
          enabled: true
+   error:
+      whitelabel:
+         enabled: false
+      path: /error
          
 # logging
 logging:

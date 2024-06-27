@@ -3,6 +3,7 @@ package com.poscodx.mysite.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.poscodx.mysite.vo.UserVo;
@@ -10,7 +11,7 @@ import com.poscodx.mysite.vo.UserVo;
 @Controller
 public class MainController {
 	@RequestMapping({"/", "/main"})
-	public String index(Model model) {
+	public String index() {
 		return "main/index";
 	}
 	
