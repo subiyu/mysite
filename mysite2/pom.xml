@@ -48,5 +48,17 @@
 
 	<build>
 		<finalName>mysite2</finalName>
+		<plugins>
+			<plugin>
+			<!-- /manger와 통신해서 war 파일 배포 -->
+			<groupId>org.apache.tomcat.maven</groupId>
+		    <artifactId>tomcat7-maven-plugin</artifactId>
+		    <version>2.2</version>
+		    <configuration>
+				<url>${tomcat.deploy.url}</url>
+				<server>tomcat-poscodx</server>
+			</configuration>
+		</plugin>
+		</plugins>
 	</build>
 </project>

@@ -27,6 +27,7 @@ spring:
       mode: HTML
       prefix: classpath:templates/
       suffix: .html
+      encofing: UTF-8
       cache: false
          
    # web
